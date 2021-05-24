@@ -40,16 +40,16 @@ args = argparse.Namespace()
 # ----- Run Parameters ---------------------------------------------#
 args.run_name = ''   # 'Name of dir to save results in (if empty, name by time)'
 args.seed = 1  # random seed
-args.n_reps = 1000  # default 5000  # number of experiment repetitions
+args.n_reps = 5000  # default 5000  # number of experiment repetitions
 
 #  how to create parameter grid:
-# args.param_grid_def = {'type': 'gamma_guidance', 'spacing': 'linspace', 'start': 0.4, 'stop': 0.99, 'num': 50, 'decimals': 10}
+args.param_grid_def = {'type': 'gamma_guidance', 'spacing': 'linspace', 'start': 0.9, 'stop': 0.99, 'num': 50, 'decimals': 10}
 # args.param_grid_def = {'type': 'l2_factor', 'spacing': 'linspace', 'start': 0., 'stop': 0.9, 'num': 50, 'decimals': 10}
 # args.param_grid_def = {'type': 'l2_fp', 'spacing': 'linspace', 'start': 0.0001, 'stop': 0.1, 'num': 50, 'decimals': 10} # $L_2$ Regularization Factor  - Fixed-Point Phase
 # args.param_grid_ def = {'type': 'l2_proj', 'spacing': 'linspace', 'start': 0.0001, 'stop': 0.001, 'num': 20, 'decimals': 10} $L_2$ Regularization Factor  - Projection Phase
 # args.param_grid_def = {'type': 'n_trajectories', 'spacing': 'arange', 'start': 1, 'stop': 21}
 # args.param_grid_def = {'type': 'depth', 'spacing': 'arange', 'start': 1, 'stop': 10}
-args.param_grid_def = {'type': 'states_TV_dist_from_uniform', 'spacing': 'list', 'list': [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]}
+# args.param_grid_def = {'type': 'states_TV_dist_from_uniform', 'spacing': 'list', 'list': [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]}
 #
 # ----- Problem Parameters ---------------------------------------------#
 
@@ -61,11 +61,11 @@ args.mrp_def = {'type': 'GridWorld', 'N0': 4, 'N1': 4, 'reward_std': 0.5, 'forwa
 
 # args.config_grid_def = {'type': 'p_left', 'spacing': 'list', 'list': [0.3, 0.5, 0.7, 0.9]} # for mrp_def['type'] == 'Chain':
 # args.config_grid_def = {'type': 'forced_mix_time', 'spacing': 'list', 'list': [1.5, 3, 6, 12]} # must be above  1.0
-# args.config_grid_def = {'type': 'n_trajectories', 'spacing': 'list', 'list': [1, 2, 4, 8]}
+args.config_grid_def = {'type': 'n_trajectories', 'spacing': 'list', 'list': [1, 2, 4, 8]}
 # args.config_grid_def = {'type': 'trajectory_len', 'spacing': 'list', 'list': [10, 20, 30]}
 # args.config_grid_def = {'type': 'states_TV_dist_from_uniform', 'spacing': 'list', 'list': [0, 0.2, 0.4, 0.6, 0.8]}   # note: above 0.9 is very slow
 # args.config_grid_def = {'type': 'None', 'spacing': 'list', 'list': [None]}
-args.config_grid_def = {'type': 'RegMethod', 'spacing': 'list_tuples',  'list':[ ('None', None), ('Discount Reg.', 0.98), ('L2 Reg.', 0.17)]} #
+# args.config_grid_def = {'type': 'RegMethod', 'spacing': 'list_tuples',  'list':[ ('None', None), ('Discount Reg.', 0.98), ('L2 Reg.', 0.17)]} #
 
 args.depth = 50  # default: 10 for 'chain', 100 for 'GridWorld'  # Length of trajectory
 args.gammaEval = 0.99   # default: 0.99  # gammaEval
@@ -84,17 +84,17 @@ args.n_trajectories = 8  #
 # ----- Algorithm Parameters ---------------------------------------------#
 args.default_gamma = None  # default: None  # The default guidance discount factor (if None use gammaEval)
 
-args.alg_type = 'LSTD'  # 'LSTD' | 'LSTD_Nested' | 'batch_TD_value_evaluation' | 'LSTD_Nested_Standard' | 'model_based_pol_eval' | 'model_based_known_P'
+args.alg_type = 'batch_TD_value_evaluation'  # 'LSTD' | 'LSTD_Nested' | 'batch_TD_value_evaluation' | 'LSTD_Nested_Standard' | 'model_based_pol_eval' | 'model_based_known_P'
 args.use_reward_scaling = False  # False | True.  set False for LSTD
 
-# args.base_lstd_l2_fp = 1e-5
+args.base_lstd_l2_fp = 1e-5
 args.base_lstd_l2_proj = 1e-4
 
 # if batch_TD_value_evaluation is used:
 args.default_l2_TD = None  # default: None  # The default L2 factor for TD (if using discount regularization)
-# args.TD_Init_type = 'zero'  # How to initialize V # Options: 'Vmax' | 'zero' | 'random_0_1' |  'random_0_Vmax' | '0.5_'Vmax' |
-# args.n_TD_iter = 5000  # Default: 500 for RandomMDP, 5000 for GridWorld  # number of TD iterations
-# args.learning_rate_def = {'type': 'a/(b+i_iter)', 'a': 500, 'b': 1000, 'scale': False}
+args.TD_Init_type = 'zero'  # How to initialize V # Options: 'Vmax' | 'zero' | 'random_0_1' |  'random_0_Vmax' | '0.5_'Vmax' |
+args.n_TD_iter = 5000  # Default: 500 for RandomMDP, 5000 for GridWorld  # number of TD iterations
+args.learning_rate_def = {'type': 'a/(b+i_iter)', 'a': 500, 'b': 1000, 'scale': False}
 # -------------------------------------------------------------------------------------------
 
 def set_config(args, config_val):
