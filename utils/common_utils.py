@@ -30,7 +30,7 @@ def start_ray(local_mode):
         Warning('Debugging can not run when in parrnell mode (local_mode==False). \n Setting local_mode=True.')
         local_mode = True
     # end if
-    ray.init(local_mode=local_mode, ignore_reinit_error=True)
+    ray.init(address='auto', local_mode=local_mode, ignore_reinit_error=True)
     if local_mode:
         print('Non-parrnell run (local_mode == True)')
     # end if
