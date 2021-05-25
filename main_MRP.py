@@ -22,7 +22,7 @@ set_default_plot_params()
 local_mode = False  # True/False - run non-parallel to get error messages and debugging
 # Option to load previous run results:
 load_run = False  # False/True If true just load results from dir, o.w run simulationz
-result_dir_to_load = './saved/main_MRP/2020_06_16_15_31_31'
+result_dir_to_load = './saved/main_MRP/2021_05_24_16_48_12'
 # result_dir_to_load = './saved/Multi_Exp/2020_05_30_07_40_26/Exp_6_LSTD_Discount_MixTime'
 # result_dir_to_load = './saved/Tabular/2020_06_16_00_52_40_PolEval_LSTD_L2Loss_L2Reg'
 
@@ -40,7 +40,7 @@ args = argparse.Namespace()
 # ----- Run Parameters ---------------------------------------------#
 args.run_name = ''   # 'Name of dir to save results in (if empty, name by time)'
 args.seed = 1  # random seed
-args.n_reps = 5000  # default 5000  # number of experiment repetitions
+# args.n_reps = 5000  # default 5000  # number of experiment repetitions
 
 #  how to create parameter grid:
 args.param_grid_def = {'type': 'gamma_guidance', 'spacing': 'linspace', 'start': 0.9, 'stop': 0.99, 'num': 50, 'decimals': 10}
@@ -53,21 +53,47 @@ args.param_grid_def = {'type': 'gamma_guidance', 'spacing': 'linspace', 'start':
 #
 # ----- Problem Parameters ---------------------------------------------#
 
+########################  my parameters  ###########################################
+args.n_reps = 3000
+
+#----- algorithm
+# args.alg_type = 'batch_TD_value_evaluation'
+args.alg_type = 'LSTD'
+
+#----- grid definition
+# args.mrp_def = {'type': 'GridWorld', 'N0': 6, 'N1': 6, 'reward_std': 0.5, 'forward_prob_distrb': 'uniform', 'goal_reward': 1, 'R_low': -0.5, 'R_high': 0.5, 'policy': 'uniform'}
+# args.mrp_def = {'type': 'GridWorld', 'N0': 8, 'N1': 8, 'reward_std': 0.5, 'forward_prob_distrb': 'uniform', 'goal_reward': 1, 'R_low': -0.5, 'R_high': 0.5, 'policy': 'uniform'}
+args.mrp_def = {'type': 'GridWorld', 'N0': 4, 'N1': 4, 'reward_std': 0.5, 'forward_prob_distrb': 'uniform', 'goal_reward': 1, 'R_low': -0.5, 'R_high': 0.5, 'policy': 'uniform'}
+
+#----- trajectory length
+# args.depth = 75
+args.depth = 50
+# args.depth = 200
+
+#----- studied variable
+# args.config_grid_def = {'type': 'n_trajectories', 'spacing': 'list', 'list': [1, 2, 4, 8]}
+# args.config_grid_def = {'type': 'states_TV_dist_from_uniform', 'spacing': 'list', 'list': [0.5]}
+args.config_grid_def = {'type': 'forced_mix_time', 'spacing': 'list', 'list': [1.5, 3, 6, 12, 24, 36, 48, 96]}
+
+#----- controls the data size when studying uniformity
+args.n_trajectories = 4
+
+########################  original paper parameters  ###########################################
 
 # args.mrp_def = {'type': 'ToyMRP', 'p01': 0.5, 'p10': 0.5,  'reward_std': 0.1}
 # args.mrp_def = {'type': 'Chain', 'p_left': 0.5, 'length': 9,  'mean_reward_range': (0, 1), 'reward_std': 0.1}
 # args.mrp_def = {'type': 'RandomMDP', 'S': 100, 'A': 2, 'k': 5, 'reward_std': 0.1, 'policy': 'uniform'}
-args.mrp_def = {'type': 'GridWorld', 'N0': 4, 'N1': 4, 'reward_std': 0.5, 'forward_prob_distrb': 'uniform', 'goal_reward': 1, 'R_low': -0.5, 'R_high': 0.5, 'policy': 'uniform'}
+# args.mrp_def = {'type': 'GridWorld', 'N0': 4, 'N1': 4, 'reward_std': 0.5, 'forward_prob_distrb': 'uniform', 'goal_reward': 1, 'R_low': -0.5, 'R_high': 0.5, 'policy': 'uniform'}
 
 # args.config_grid_def = {'type': 'p_left', 'spacing': 'list', 'list': [0.3, 0.5, 0.7, 0.9]} # for mrp_def['type'] == 'Chain':
 # args.config_grid_def = {'type': 'forced_mix_time', 'spacing': 'list', 'list': [1.5, 3, 6, 12]} # must be above  1.0
-args.config_grid_def = {'type': 'n_trajectories', 'spacing': 'list', 'list': [1, 2, 4, 8]}
+# args.config_grid_def = {'type': 'n_trajectories', 'spacing': 'list', 'list': [1, 2, 4, 8]}
 # args.config_grid_def = {'type': 'trajectory_len', 'spacing': 'list', 'list': [10, 20, 30]}
 # args.config_grid_def = {'type': 'states_TV_dist_from_uniform', 'spacing': 'list', 'list': [0, 0.2, 0.4, 0.6, 0.8]}   # note: above 0.9 is very slow
 # args.config_grid_def = {'type': 'None', 'spacing': 'list', 'list': [None]}
 # args.config_grid_def = {'type': 'RegMethod', 'spacing': 'list_tuples',  'list':[ ('None', None), ('Discount Reg.', 0.98), ('L2 Reg.', 0.17)]} #
 
-args.depth = 50  # default: 10 for 'chain', 100 for 'GridWorld'  # Length of trajectory
+# args.depth = 50  # default: 10 for 'chain', 100 for 'GridWorld'  # Length of trajectory
 args.gammaEval = 0.99   # default: 0.99  # gammaEval
 
 args.train_sampling_def = {'type': 'Trajectories'}
@@ -79,12 +105,12 @@ args.train_sampling_def = {'type': 'Trajectories'}
 args.evaluation_loss_type = 'L2_uni_weight' #  'rankings_kendalltau' | 'L2_uni_weight | 'L2' | 'one_pol_iter_l2_loss'
 
 args.initial_state_distrb_type = 'uniform'  # 'uniform' | 'middle'
-args.n_trajectories = 8  #
+# args.n_trajectories = 8  #
 
 # ----- Algorithm Parameters ---------------------------------------------#
 args.default_gamma = None  # default: None  # The default guidance discount factor (if None use gammaEval)
 
-args.alg_type = 'batch_TD_value_evaluation'  # 'LSTD' | 'LSTD_Nested' | 'batch_TD_value_evaluation' | 'LSTD_Nested_Standard' | 'model_based_pol_eval' | 'model_based_known_P'
+# args.alg_type = 'batch_TD_value_evaluation'  # 'LSTD' | 'LSTD_Nested' | 'batch_TD_value_evaluation' | 'LSTD_Nested_Standard' | 'model_based_pol_eval' | 'model_based_known_P'
 args.use_reward_scaling = False  # False | True.  set False for LSTD
 
 args.base_lstd_l2_fp = 1e-5
